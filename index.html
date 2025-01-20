@@ -1,12 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyecto - Preentrega</title>
+    <title>Agenda de Turnos</title>
+    <link rel="stylesheet" href="./scripts/index.css">
 </head>
 <body>
-    <h1>BIENVENIDOS (PREENTREGA DE MATIAS MIQUELARENA)</h1>
+    <div class="container">
+        <h1>Agenda de Turnos</h1>
+
+        <!-- Formulario para agregar turnos -->
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" placeholder="Ingresa tu nombre" />
+
+            <label for="turno">Día y hora del turno:</label>
+            <input type="text" id="turno" placeholder="Ej: Lunes 15:00" />
+
+            <label for="servicio">Servicio:</label>
+            <select id="servicio">
+                <option value="Dermatología">Dermatología</option>
+                <option value="Electrocardiograma">Electrocardiograma</option>
+                <option value="Otorrino">Otorrino</option>
+                <option value="Oculista">Oculista</option>
+                <option value="Urologo">Urólogo</option>
+                <option value="Ginecologo">Ginecólogo</option>
+                <option value="Otros">Otros</option>
+            </select>
+
+            <button id="agregarTurno">Agregar Turno</button>
+        </div>
+
+        <hr>
+
+        <!-- Sección para ver turnos agendados -->
+        <button id="verTurnos">Ver Turnos Agendados</button>
+
+        <!-- Contenedor donde se mostrarán los turnos agendados -->
+        <div class="turnos-list" id="turnosList"></div>
+    </div>
 
     <script src="./scripts/main.js"></script>
 </body>

@@ -1,57 +1,106 @@
 console.log("Bienvenidos a mi agenda de turnos");
 
-// Pedir el nombre del usuario
-let nombreApellido = prompt("Ingrese su nombre y apellido:");
-alert("Hola " + nombreApellido + " bienvenido!");
+// Clase Turno para representar un turno
+class Turno {
+    constructor(nombre, turno, servicio, duracion) {
+        this.nombre = nombre;         // Nombre del cliente
+        this.turno = turno;           // Día y hora del turno
+        this.servicio = servicio;     // Tipo de servicio
+        this.duracion = duracion;     // Duración en minutos
+        this.estado = "Agendado";     // Estado del turno (por defecto agendado)
+    }
 
-// Arreglo para almacenar los turnos
-let agenda = [];
-
-// Variable para controlar el ciclo
-let seguir = true;
-
-while (seguir) {
-    let opcion = prompt("¿Qué deseas hacer?\n1. Agregar turno\n2. Ver turnos agendados\n3. Cancelar turno\n4. Salir");
-
-    if (opcion === "1") {
-        // Agregar un turno
-        let turno = prompt("Ingresa el día y hora del turno (ejemplo: 'Lunes 15:00')");
-        if (turno) {
-            agenda.push({ nombre: nombreApellido, turno: turno, estado: "Agendado" });
-            alert("Turno agendado exitosamente: " + turno);
-        } else {
-            alert("No ingresaste un turno válido.");
-        }
-    } else if (opcion === "2") {
-        // Mostrar todos los turnos
-        if (agenda.length === 0) {
-            alert("No hay turnos agendados.");
-        } else {
-            let mensaje = "Turnos agendados:\n";
-            for (let i = 0; i < agenda.length; i++) {
-                mensaje += (i + 1) + ". " + agenda[i].turno + " - Estado: " + agenda[i].estado + "\n";
-            }
-            alert(mensaje);
-        }
-    } else if (opcion === "3") {
-        // Cancelar un turno
-        let turnoId = prompt("Ingresa el número del turno que deseas cancelar:\n(Escribe el número de turno como se muestra en la lista)");
-
-        // Convertir el número ingresado a un índice válido
-        turnoId = parseInt(turnoId) - 1;  // Restamos 1 para que el índice coincida con la lista
-
-        // Verificamos si el turnoId es válido (está dentro del rango de turnos)
-        if (turnoId >= 0 && turnoId < agenda.length) {
-            agenda[turnoId].estado = "Cancelado";
-            alert("El turno " + agenda[turnoId].turno + " ha sido cancelado.");
-        } else {
-            alert("Turno no encontrado. Por favor ingresa un número de turno válido.");
-        }
-    } else if (opcion === "4") {
-        // Salir
-        alert("¡Hasta luego!");
-        seguir = false;  // Cambiamos la variable a false para salir del ciclo
-    } else {
-        alert("Opción no válida.");
+    // Método para obtener los detalles del turno
+    obtenerDetalles() {
+        return `${this.turno} - Servicio: ${this.servicio} - Duración: ${this.duracion} minutos - Estado: ${this.estado}`;
     }
 }
+
+// Clase Agenda para gestionar los turnos
+class Agenda {
+    constructor() {
+        // Intentamos cargar los turnos guardados en LocalStorage, si existen
+        const turnosGuardados = JSON.parse(localStorage.getItem('turnos'));
+        this.turnos = turnosGuardados || [];  // Si no existen, iniciamos con un arreglo vacío
+    }
+
+    // Método para agregar un turno
+    agregarTurno(turno) {
+        this.turnos.push(turno);
+        this.guardarTurnos();  // Guardamos los turnos en LocalStorage cada vez que agregamos uno
+    }
+
+    // Método para mostrar todos los turnos agendados
+    mostrarTurnos() {
+        let turnosListElement = document.getElementById('turnosList');
+        turnosListElement.innerHTML = ''; // Limpiar la lista antes de mostrar los nuevos turnos
+        
+        if (this.turnos.length === 0) {
+            turnosListElement.innerHTML = "<p>No tienes turnos agendados.</p>";
+        } else {
+            this.turnos.forEach(turno => {
+                let turnoElement = document.createElement('div');
+                turnoElement.classList.add('turno');
+                turnoElement.textContent = turno.obtenerDetalles();
+                turnosListElement.appendChild(turnoElement);
+            });
+        }
+    }
+
+    // Método para guardar los turnos en LocalStorage
+    guardarTurnos() {
+        localStorage.setItem('turnos', JSON.stringify(this.turnos));
+    }
+}
+
+// Crear una nueva agenda
+let agenda = new Agenda();
+
+// Obtener referencias a los elementos del DOM
+let nombreInput = document.getElementById('nombre');
+let turnoInput = document.getElementById('turno');
+let servicioSelect = document.getElementById('servicio');
+let agregarTurnoButton = document.getElementById('agregarTurno');
+let verTurnosButton = document.getElementById('verTurnos');
+
+// Evento para agregar un turno
+agregarTurnoButton.addEventListener('click', function () {
+    let nombre = nombreInput.value;
+    let turno = turnoInput.value;
+    let servicio = servicioSelect.value;
+    let duracion;
+
+    // Definir la duración según el servicio
+    if (servicio === "Dermatología") {
+        duracion = 30; // Duración predeterminada para Dermatología
+    } else if (servicio === "Electrocardiograma") {
+        duracion = 20; // Duración predeterminada para Electrocardiograma
+    } else if (servicio === "Otorrino") {
+        duracion = 40; // Duración predeterminada para Otorrino
+    } else if (servicio === "Oculista") {
+        duracion = 30; // Duración predeterminada para Oculista
+    } else if (servicio === "Urologo") {
+        duracion = 30; // Duración predeterminada para Urólogo
+    } else if (servicio === "Ginecologo") {
+        duracion = 45; // Duración predeterminada para Ginecólogo
+    } else if (servicio === "Otros") {
+        duracion = 30; // Duración predeterminada para "Otros"
+    }
+
+    if (nombre && turno && servicio) {
+        let nuevoTurno = new Turno(nombre, turno, servicio, duracion);
+        agenda.agregarTurno(nuevoTurno);
+        alert("Turno agendado exitosamente.");
+        // Limpiar los campos del formulario
+        nombreInput.value = '';
+        turnoInput.value = '';
+        servicioSelect.value = 'Dermatología'; // Restablecer la selección
+    } else {
+        alert("Faltan datos para agendar el turno.");
+    }
+});
+
+// Evento para ver los turnos agendados
+verTurnosButton.addEventListener('click', function () {
+    agenda.mostrarTurnos();
+});

@@ -1,0 +1,16 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.turnos-list {
+    margin-top: 20px;
+}
+.turno {
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+}
