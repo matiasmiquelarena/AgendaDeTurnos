@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda de Turnos</title>
-    <link rel="stylesheet" href="./scripts/index.css">
+    <link rel="stylesheet" href="./estilos/index.css">
 </head>
 <body>
     <div class="container">
@@ -16,7 +16,7 @@
             <input type="text" id="nombre" placeholder="Ingresa tu nombre" />
 
             <label for="turno">Día y hora del turno:</label>
-            <input type="text" id="turno" placeholder="Ej: Lunes 15:00" />
+            <input type="text" id="turno" placeholder="Ej: 2025-02-05 15:00" />
 
             <label for="servicio">Servicio:</label>
             <select id="servicio">
@@ -41,6 +41,8 @@
         <div class="turnos-list" id="turnosList"></div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
     <script src="./scripts/main.js"></script>
 </body>
 </html>
